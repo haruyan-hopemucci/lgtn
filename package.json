@@ -1,0 +1,8 @@
+{
+  "name": "lgtn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/haruyan-hopemucci/lgtn.git",
+  "author": "haruyan-hopemucci <68041476+haruyan-hopemucci@users.noreply.github.com>",
+  "license": "MIT"
+}
