@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>クリップボードから画像を取得するテスト</h1>
+  <div id="outbox">ここにクリップボードのテキストが入ります</div>
+
+  <button id="btn__read-clipboard">Access</button>
+  <div id="paste-area" contenteditable="true">ここをクリックしてから画像をペーストしてください</div>
+  <img id="outputImage" style="border: 1px solid black;">
+  <script>
+    document.querySelector('#btn__read-clipboard').addEventListener('click', (event) => {
+      navigator.clipboard
+        .readText()
+        .then((clipText) => (document.getElementById("outbox").innerText = clipText));
+    })
+    document.querySelector('#paste-area').addEventListener('paste', (event) => {
+
+      event.preventDefault()
+      // 画像の場合
+      // e.clipboardData.types.length == 0
+      // かつ
+      // e.clipboardData.types[0] == "Files"
+      // となっているので、それ以外を弾く
+      if (!event.clipboardData
+        || !event.clipboardData.types
+        || (event.clipboardData.types.length != 1)
+        || (event.clipboardData.types[0] != "Files")) {
+        return true;
+      }
+
+      // ファイルとして得る
+      // (なぜかgetAsStringでは上手くいかなかった)
+      const imageFile = event.clipboardData.items[0].getAsFile();
+
+      // FileReaderで読み込む
+      const fr = new FileReader();
+      fr.onload = function (e) {
+        // onload内ではe.target.resultにbase64が入っているのであとは煮るなり焼くなり
+        const base64 = e.target.result;
+        document.querySelector("#outputImage").src = base64;
+      };
+      fr.readAsDataURL(imageFile);
+
+    })
+  </script>
+</body>
+
+</html>
