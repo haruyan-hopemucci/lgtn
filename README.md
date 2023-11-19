@@ -18,3 +18,5 @@ Looks Good To Neo Image Generator via clipboard
 - Windows10
   - Google Chrome 119以降
   - Microsoft Edge 119以降
+- MacOS Venture
+  - Google Chrome 119以降
