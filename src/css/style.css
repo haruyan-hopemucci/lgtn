@@ -1,0 +1,10 @@
+img#pasted-image {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+canvas#output-image {
+  width: 400px;
+  height: 400px;
+}
+/*# sourceMappingURL=style.css.map */
