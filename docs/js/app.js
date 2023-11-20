@@ -1,7 +1,14 @@
 'use strict'
 
 $(function (){
-  document.querySelector('#paste-area').addEventListener('paste', (event) => {
+
+  const setMessage = message => {
+    const elem = document.querySelector("#paste-area-message")
+    elem.textContent = message
+  }
+
+    // document.querySelector('#paste-area').addEventListener('paste', (event) => {
+    document.addEventListener('paste', (event) => {
 
     event.preventDefault()
 
@@ -9,11 +16,11 @@ $(function (){
       || !event.clipboardData.types
       || (event.clipboardData.types.length != 1)
       || (event.clipboardData.types[0] != "Files")) {
-        event.target.innerHTML = 'ペーストされたデータが画像ではありません'
+        setMessage('ペーストされたデータが画像ではありません')
       return true;
     }
   
-    event.target.innerHTML = 'LGTN画像を生成しています...'
+    setMessage('LGTN画像を生成しています...')
 
     generateLGTN(event.clipboardData.items[0])
 
@@ -51,11 +58,11 @@ $(function (){
       const item = new ClipboardItem({ 'image/png': blob})
       navigator.clipboard.write([item])
         .then( () => {
-          pasteArea.innerHTML = 'クリップボードにLGTN画像がコピーされました！'
+          setMessage('クリップボードにLGTN画像がコピーされました！')
         })
         .catch( ex => {
           console.error(ex)
-          pasteArea.innerHTML = 'クリップボードの書き込み時にエラーが発生しました'
+          setMessage('クリップボードの書き込み時にエラーが発生しました')
         })
     });
 
