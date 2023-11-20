@@ -34,7 +34,8 @@ $(function (){
 
   const drawCanvas = function() {
     const imgEl = document.querySelector("#pasted-image")
-    const lgtnEl = document.querySelector("#img__lgtn")
+    const selectedImageId = document.querySelector('input[name="chooseOverlay"]:checked').value
+    const lgtnEl = document.querySelector(`#img__${selectedImageId}`)
     const canvas = document.querySelector('#output-image')
     const context = canvas.getContext('2d')
 

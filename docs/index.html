@@ -30,7 +30,18 @@
       <div id="paste-area" contenteditable="true">
         ここをクリックした後画像をペーストしてください。
       </div>
+      <div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="chooseOverlay" id="inlineRadio1" value="lgtm" checked>
+          <label class="form-check-label" for="inlineRadio1">LGTM</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="chooseOverlay" id="inlineRadio2" value="lgtn">
+          <label class="form-check-label" for="inlineRadio2">LGTN</label>
+        </div>
+      </div>
       <img id="pasted-image" hidden />
+      <img id="img__lgtm" src="./img/lgtm.png" hidden />
       <img id="img__lgtn" src="./img/lgtn.png" hidden />
       <canvas id="output-image" width="400" height="400"></canvas>
       <div class="alert alert-warning" role="alert">
