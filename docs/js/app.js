@@ -7,7 +7,6 @@ $(function (){
     elem.textContent = message
   }
 
-    // document.querySelector('#paste-area').addEventListener('paste', (event) => {
     document.addEventListener('paste', (event) => {
 
     event.preventDefault()
@@ -64,7 +63,6 @@ $(function (){
     }
 
     context.clearRect(0, 0, canvas.width, canvas.height)
-    // context.drawImage(imgEl, 0, 0, canvas.width, canvas.height)
     context.drawImage(imgEl, drawX, drawY, drawWidth, drawHeight)
     context.drawImage(lgtnEl, 0, 0, canvas.width, canvas.height)
     copyImageToClipboard(canvas)
