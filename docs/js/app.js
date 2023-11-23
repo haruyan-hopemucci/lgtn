@@ -3,9 +3,9 @@
 $(function () {
   var gCanvas = document.querySelector("canvas#output-image");
   var gPastedImage = document.querySelector("img#pasted-image");
-  var gPastedImage = document.querySelector("img#img__lgtn");
   const selectedOverlayImageValue = () =>
     document.querySelector('input[name="chooseOverlay"]:checked').value;
+  const getOverlayImage = () => document.querySelector(`img#img__${selectedOverlayImageValue()}`);
 
   const setMessage = (message) => {
     const elem = document.querySelector("#paste-area-message");
@@ -50,10 +50,10 @@ $(function () {
   };
 
   const drawCanvas = function () {
-    const imgEl = document.querySelector("#pasted-image");
+    const imgEl = gPastedImage
     const selectedImageId = selectedOverlayImageValue();
-    const lgtnEl = document.querySelector(`#img__${selectedImageId}`);
-    const canvas = document.querySelector("#output-image");
+    const lgtnEl = getOverlayImage()
+    const canvas = gCanvas
     const context = canvas.getContext("2d");
 
     // 画像のアスペクト比から描画する位置決めをする
