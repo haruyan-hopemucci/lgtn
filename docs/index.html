@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja-jp">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LGTN Generator</title>
-    <script
-      src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous"
-    ></script>
-    <script src="./js/app.js"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-      crossorigin="anonymous"
-    ></script>
-    <link rel="stylesheet" href="./css/style.css" />
-  </head>
-  <body>
-    <main class="container">
-      <h1>LGTN Generator <small>v0.2.0</small></h1>
-      <div id="paste-area">
-        <div id="paste-area-message">クリップボードにコピーした画像をペーストしてください。</div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LGTN Generator</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="./js/app.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <main class="container">
+    <h1>LGTN Generator <small>v0.3.0</small></h1>
+    <div id="paste-area">
+      <div id="paste-area-message">
+        クリップボードにコピーした画像をペーストしてください。
       </div>
-      <div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="chooseOverlay" id="inlineRadio1" value="lgtm" checked>
-          <label class="form-check-label" for="inlineRadio1">LGTM</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="chooseOverlay" id="inlineRadio2" value="lgtn">
-          <label class="form-check-label" for="inlineRadio2">LGTN</label>
-        </div>
+    </div>
+    <div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="chooseOverlay" id="inlineRadio1" value="lgtm" checked />
+        <label class="form-check-label" for="inlineRadio1">LGTM画像を生成</label>
       </div>
-      <img id="pasted-image" hidden />
-      <img id="img__lgtm" src="./img/lgtm.png" hidden />
-      <img id="img__lgtn" src="./img/lgtn.png" hidden />
-      <canvas id="output-image" width="400" height="400"></canvas>
-      <div class="alert alert-warning" role="alert">
-        <h2>制限事項</h2>
-        <ul>
-          <li>
-            Firefox, safariでは動作しません。 各種スマホは動作未確認です。
-          </li>
-        </ul>
-        <h2>動作確認環境</h2>
-        <h3>Windows10</h3>
-        <ul>
-          <li>Google Chrome</li>
-          <li>Microsoft Edge</li>
-        </ul>
-        <h3>MacOS Venture</h3>
-        <ul>
-          <li>Google Chrome</li>
-        </ul>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="chooseOverlay" id="inlineRadio2" value="lgtn" />
+        <label class="form-check-label" for="inlineRadio2">LGTN画像を生成</label>
       </div>
-    </main>
-  </body>
+    </div>
+    <img id="pasted-image" hidden />
+    <img id="img__lgtm" src="./img/lgtm.png" hidden />
+    <img id="img__lgtn" src="./img/lgtn.png" hidden />
+    <canvas id="output-image" width="400" height="400"></canvas>
+    <div class="alert alert-warning" role="alert">
+      <h2>使用方法</h2>
+      <ul>
+        <li>Finder, Exproloerで画像ファイルをコピーしてペースト！</li>
+        <li>
+          OSの画像切り抜き機能でスクリーンをクリップボードにコピーしてペースト！
+        </li>
+      </ul>
+      <h2>制限事項</h2>
+      <ul>
+        <li>
+          Firefox, safariでは動作しません。 各種スマホは動作未確認です。
+        </li>
+      </ul>
+      <h2>動作確認環境</h2>
+      <h3>Windows10</h3>
+      <ul>
+        <li>Google Chrome</li>
+        <li>Microsoft Edge</li>
+      </ul>
+      <h3>MacOS Venture</h3>
+      <ul>
+        <li>Google Chrome</li>
+      </ul>
+    </div>
+  </main>
+</body>
+
 </html>
