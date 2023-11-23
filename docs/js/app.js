@@ -1,31 +1,41 @@
 'use strict'
 
-$(function (){
+$(function () {
+  var gCanvas = document.querySelector('canvas#output-image')
+  var gPastedImage = document.querySelector('img#pasted-image')
+  var gPastedImage = document.querySelector('img#img__lgtn')
+  const selectedOverlayImageValue = () => document.querySelector('input[name="chooseOverlay"]:checked').value
 
   const setMessage = message => {
     const elem = document.querySelector("#paste-area-message")
     elem.textContent = message
   }
 
-    document.addEventListener('paste', (event) => {
+  $('input[name="chooseOverlay"]').on('change', event => {
+    if (gPastedImage.src) {
+      setMessage(`${selectedOverlayImageValue()}画像を再生成しています...`)
+      redrawLgtnImage()
+    }
+  })
 
+  document.addEventListener('paste', (event) => {
     event.preventDefault()
 
     if (!event.clipboardData
       || !event.clipboardData.types
       || (event.clipboardData.types.length != 1)
       || (event.clipboardData.types[0] != "Files")) {
-        setMessage('ペーストされたデータが画像ではありません')
+      setMessage('ペーストされたデータが画像ではありません')
       return true;
     }
-  
+
     setMessage('LGTN画像を生成しています...')
 
     generateLGTN(event.clipboardData.items[0])
 
   })
 
-  const generateLGTN = async function(clipboardItem) {
+  const generateLGTN = async function (clipboardItem) {
     const imageFile = clipboardItem.getAsFile();
     const imgEl = document.querySelector("#pasted-image")
     const fr = new FileReader();
@@ -38,9 +48,9 @@ $(function (){
 
   }
 
-  const drawCanvas = function() {
+  const drawCanvas = function () {
     const imgEl = document.querySelector("#pasted-image")
-    const selectedImageId = document.querySelector('input[name="chooseOverlay"]:checked').value
+    const selectedImageId = selectedOverlayImageValue()
     const lgtnEl = document.querySelector(`#img__${selectedImageId}`)
     const canvas = document.querySelector('#output-image')
     const context = canvas.getContext('2d')
@@ -52,7 +62,7 @@ $(function (){
     let drawY = 0
     let drawWidth = canvas.width
     let drawHeight = canvas.height
-    if(imgWidth > imgHeight) {
+    if (imgWidth > imgHeight) {
       // 横の方が長い場合、y座標側を調整する
       drawHeight = imgHeight * drawWidth / imgWidth
       drawY = (canvas.height - drawHeight) / 2
@@ -70,18 +80,21 @@ $(function (){
 
   const copyImageToClipboard = (canvas) => {
     const pasteArea = document.querySelector('#paste-area')
-    canvas.toBlob( blob => {
-      const item = new ClipboardItem({ 'image/png': blob})
+    canvas.toBlob(blob => {
+      const item = new ClipboardItem({ 'image/png': blob })
       navigator.clipboard.write([item])
-        .then( () => {
-          setMessage('クリップボードにLGTN画像がコピーされました！')
+        .then(() => {
+          setMessage(`クリップボードに${selectedOverlayImageValue()}画像がコピーされました！`)
         })
-        .catch( ex => {
+        .catch(ex => {
           console.error(ex)
           setMessage('クリップボードの書き込み時にエラーが発生しました')
         })
     });
+  }
 
+  const redrawLgtnImage = () => {
+    drawCanvas()
   }
 })
 
