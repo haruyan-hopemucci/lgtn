@@ -3,7 +3,7 @@ Looks Good To Neo Image Generator via clipboard
 
 ## summary
 
-クリップボードから画像データを貼り付けして、LGTNテキストを合成した画像をクリップボードに書き込むツールです。
+クリップボードから画像データを貼り付けして、LGTN(LGTM)テキストを合成した画像をクリップボードに書き込むツールです。
 
 [現在公開しているGithub Pagesへのリンク](https://haruyan-hopemucci.github.io/lgtn/)
 
@@ -12,6 +12,12 @@ Looks Good To Neo Image Generator via clipboard
 - クリップボードの画像からLGTNテキストを合成した画像をクリップボードに書き込む
 - 書き込んだクリップボードの画像はそのままGithubのIssueやPullRequestのテキストボックスにペーストすることができる
 - フロントエンド(javascript)だけで実装されているのでサーバーレス運用が可能。
+
+## Supported file formats
+
+- image/jpeg
+- image/png
+- image/heic (v0.4.0以降)
 
 ## Supported Environments
 
