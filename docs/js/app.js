@@ -31,11 +31,29 @@ $(function () {
       setMessage("ペーストされたデータが画像ではありません");
       return true;
     }
-
     setMessage("LGTN画像を生成しています...");
-
-    generateLGTN(event.clipboardData.items[0]);
+    const fileType = event.clipboardData.items[0].type
+    switch (fileType) {
+      case 'image/heic':
+        convertHeicToPng(event.clipboardData.items[0])
+        break
+      case 'image/png':
+      case 'image/jpeg':
+        generateLGTN(event.clipboardData.items[0])
+        break
+      default:
+        setMessage("未対応の画像形式です。");
+    }
   });
+
+  const convertHeicToPng = async function (clipboardItem) {
+    const imageFile = clipboardItem.getAsFile();
+    const conversionResult = await heic2any({ blob: imageFile })
+    const dataUrl = URL.createObjectURL(conversionResult)
+    const imgEl = document.querySelector("#pasted-image");
+    imgEl.addEventListener("load", drawCanvas);
+    imgEl.src = dataUrl;
+  }
 
   const generateLGTN = async function (clipboardItem) {
     const imageFile = clipboardItem.getAsFile();
