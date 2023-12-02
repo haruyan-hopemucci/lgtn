@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #target {
+        max-width: 100vw;
+      }
+      img {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>target</h1>
+    <div id="target"></div>
+
+    <script src="../docs/js/heic2any.js"></script>
+    <script>
+      fetch("./test.heic")
+        .then((res) => res.blob())
+        .then((blob) =>
+          heic2any({
+            blob,
+          })
+        )
+        .then((conversionResult) => {
+          var url = URL.createObjectURL(conversionResult);
+          document.getElementById(
+            "target"
+          ).innerHTML = `<a target="_blank" href="${url}"><img src="${url}"></a>`;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    </script>
+  </body>
+</html>
