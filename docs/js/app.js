@@ -1,18 +1,24 @@
 "use strict";
 
+const textPositionOffset = {
+  top: [0, -100],
+  middle: [0, 0],
+  bottom: [0, 120],
+}
+
 $(function () {
   var gCanvas = document.querySelector("canvas#output-image");
   var gPastedImage = document.querySelector("img#pasted-image");
   const selectedOverlayImageValue = () =>
     document.querySelector('input[name="chooseOverlay"]:checked').value;
   const getOverlayImage = () => document.querySelector(`img#img__${selectedOverlayImageValue()}`);
-
+  const getTextPosition = () => document.querySelector('input[name="textPosition"]:checked').value
   const setMessage = (message) => {
     const elem = document.querySelector("#paste-area-message");
     elem.textContent = message;
   };
 
-  $('input[name="chooseOverlay"]').on("change", (event) => {
+  $('input[name="chooseOverlay"], input[name="textPosition"]').on("change", (event) => {
     if (gPastedImage.src) {
       setMessage(`${selectedOverlayImageValue()}画像を再生成しています...`);
       redrawLgtnImage();
@@ -90,10 +96,12 @@ $(function () {
       drawWidth = (imgWidth * drawHeight) / imgHeight;
       drawX = (canvas.width - drawWidth) / 2;
     }
-
+    
+    // テキスト描画位置の決定
+    const [drawTextX, drawTextY] = textPositionOffset[getTextPosition()]
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imgEl, drawX, drawY, drawWidth, drawHeight);
-    context.drawImage(lgtnEl, 0, 0, canvas.width, canvas.height);
+    context.drawImage(lgtnEl, drawTextX, drawTextY, canvas.width, canvas.height);
     copyImageToClipboard(canvas);
   };
 
