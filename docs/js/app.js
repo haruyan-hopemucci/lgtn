@@ -1,10 +1,36 @@
 "use strict";
 
+const MAX_HISTORY_NUM = 10
+const KEY_LOCALSTORAGE_KEY_PREFIX = 'lgtn_history_img'
+
 const textPositionOffset = {
   top: [0, -100],
   middle: [0, 0],
   bottom: [0, 120],
 }
+
+const loadHistoriesAsync = () => {
+  const imgHistories = []
+  const startIndex = loadImgHistoryStartIndex()
+  for( let i = 0; i < MAX_HISTORY_NUM; i++){
+    const num = (startIndex - i + MAX_HISTORY_NUM) % MAX_HISTORY_NUM
+    imgHistories.push(loadImgHistory(num))
+  }
+  // TODO: history領域に画像をセットする処理など
+  console.log(imgHistories)
+}
+
+const loadImgHistoryStartIndex = () => 
+  localStorage.getItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_index`) || 0
+
+const loadImgHistory(num) = () =>
+  localStorage.getItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_${num}`)
+
+const savaImgHistoryStartIndex = (value) =>
+  localStorage.setItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_index`, value)
+
+const saveImgHistory(num, value) = () =>
+  localStorage.getItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_${num}`, value)
 
 $(function () {
   var gCanvas = document.querySelector("canvas#output-image");
@@ -66,7 +92,7 @@ $(function () {
     const imgEl = document.querySelector("#pasted-image");
     const fr = new FileReader();
     fr.onload = function (e) {
-      const base64 = e.target.result;
+      const base64 = e.target.result
       imgEl.src = base64;
     };
     fr.readAsDataURL(imageFile);
