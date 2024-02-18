@@ -28,85 +28,92 @@
   <body>
     <main class="container">
       <h1>LGTN Generator <small>v0.5.0</small></h1>
-      <div id="paste-area">
-        <div id="paste-area-message">
-          クリップボードにコピーした画像をペーストしてください。
+      <div class="row">
+        <div class="col-md-6">
+          <div id="paste-area">
+            <div id="paste-area-message">
+              クリップボードにコピーした画像をペーストしてください。
+            </div>
+          </div>
+          <div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="chooseOverlay"
+                id="inlineRadio1"
+                value="LGTM"
+                checked
+              />
+              <label class="form-check-label" for="inlineRadio1"
+                >LGTM画像を生成</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="chooseOverlay"
+                id="inlineRadio2"
+                value="LGTN"
+              />
+              <label class="form-check-label" for="inlineRadio2"
+                >LGTN画像を生成</label
+              >
+            </div>
+          </div>
+          <div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="textPosition"
+                id="textPositionTop"
+                value="top"
+              />
+              <label class="form-check-label" for="textPositionTop"
+                >テキスト位置：上</label
+              >
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="textPosition"
+                id="textPositionMiddle"
+                value="middle"
+                checked
+              />
+              <label class="form-check-label" for="textPositionMiddle"
+                >テキスト位置：中</label
+              >
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="textPosition"
+                id="textPositionBottom"
+                value="bottom"
+              />
+              <label class="form-check-label" for="textPositionBottom"
+                >テキスト位置：下</label
+              >
+            </div>
+          </div>
+          <img id="pasted-image" hidden />
+          <img id="img__LGTM" src="./img/lgtm.png" hidden />
+          <img id="img__LGTN" src="./img/lgtn.png" hidden />
+          <canvas id="output-image" width="400" height="400"></canvas>
+        </div>
+        <div class="col-md-6">
+          <section id="history" class="history">
+            <h2>History</h2>
+            <div id="history-container" class="history-container"></div>
+          </section>
         </div>
       </div>
-      <div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="chooseOverlay"
-            id="inlineRadio1"
-            value="LGTM"
-            checked
-          />
-          <label class="form-check-label" for="inlineRadio1"
-            >LGTM画像を生成</label
-          >
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="chooseOverlay"
-            id="inlineRadio2"
-            value="LGTN"
-          />
-          <label class="form-check-label" for="inlineRadio2"
-            >LGTN画像を生成</label
-          >
-        </div>
-      </div>
-      <div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="textPosition"
-            id="textPositionTop"
-            value="top"
-          />
-          <label class="form-check-label" for="textPositionTop"
-            >テキスト位置：上</label
-          >
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="textPosition"
-            id="textPositionMiddle"
-            value="middle"
-            checked
-          />
-          <label class="form-check-label" for="textPositionMiddle"
-            >テキスト位置：中</label
-          >
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="textPosition"
-            id="textPositionBottom"
-            value="bottom"
-          />
-          <label class="form-check-label" for="textPositionBottom"
-            >テキスト位置：下</label
-          >
-        </div>
-      </div>
-      <img id="pasted-image" hidden />
-      <img id="img__LGTM" src="./img/lgtm.png" hidden />
-      <img id="img__LGTN" src="./img/lgtn.png" hidden />
-      <canvas id="output-image" width="400" height="400"></canvas>
-      <section id="history" class="history">
-        <h2>History</h2>
-        <div id="history-container" class="history-container"></div>
-      </section>
+
       <div class="alert alert-warning" role="alert">
         <h2>使用方法</h2>
         <ul>

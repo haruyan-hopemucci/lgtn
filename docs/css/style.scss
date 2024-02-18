@@ -10,7 +10,6 @@
     // left: 1em;
     // z-index: -100;
   }
-
 }
 
 img#pasted-image {
@@ -26,4 +25,18 @@ canvas#output-image {
 
 img[hidden] {
   display: none;
+}
+
+.history-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  .history-item {
+    object-fit: cover;
+    img {
+      width: 100%;
+      object-fit: contain;
+    }
+  }
 }
