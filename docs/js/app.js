@@ -23,9 +23,10 @@ const loadHistories = () => {
   const imgHistoryKeys = getHistoryKeys()
   const container = document.querySelector('#history-container')
   const template = document.querySelector('#history-template')
+  container.childNodes.forEach(node => node.remove())
   imgHistoryKeys.forEach(item => {
-    const t = template.cloneNode(true)
-    t.attributes.id = item
+    const t = template.content.cloneNode(true)
+    t.id = item
     t.querySelector('img').src = localStorage.getItem(item)
     container.appendChild(t)
   })
@@ -51,6 +52,9 @@ $(function () {
     const elem = document.querySelector("#paste-area-message");
     elem.textContent = message;
   };
+
+  // ページ読み込み時に履歴を読み込む
+  loadHistories()
 
   $('input[name="chooseOverlay"], input[name="textPosition"]').on("change", (event) => {
     if (gPastedImage.src) {
@@ -107,7 +111,7 @@ $(function () {
     imgEl.addEventListener("load", drawCanvas);
   };
 
-  const drawCanvas = function () {
+  const drawCanvas = function (redraw = false) {
     const imgEl = gPastedImage
     const selectedImageId = selectedOverlayImageValue();
     const lgtnEl = getOverlayImage()
@@ -135,6 +139,8 @@ $(function () {
     const [drawTextX, drawTextY] = textPositionOffset[getTextPosition()]
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imgEl, drawX, drawY, drawWidth, drawHeight);
+    // 再描画の場合は履歴に追加しない
+    redraw && addHistory(canvas.toDataURL())
     context.drawImage(lgtnEl, drawTextX, drawTextY, canvas.width, canvas.height);
     copyImageToClipboard(canvas);
   };
@@ -158,6 +164,6 @@ $(function () {
   };
 
   const redrawLgtnImage = () => {
-    drawCanvas();
+    drawCanvas(redraw = true);
   };
 });
