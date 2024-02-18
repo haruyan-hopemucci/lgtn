@@ -15,7 +15,7 @@ const getHistoryKeys = () => {
     const hkey = localStorage.key(i)
     hkey.startsWith(KEY_LOCALSTORAGE_KEY_PREFIX) && imgHistoryKeys.push(hkey)
   }
-  imgHistoryKeys.sort()
+  imgHistoryKeys.sort().reverse()
   return imgHistoryKeys
 }
 
@@ -37,8 +37,7 @@ const addHistory = (dataUrl) => {
   localStorage.setItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}${timestamp}`, dataUrl)
   const imgHistoryKeys = getHistoryKeys()
   while (imgHistoryKeys.length > MAX_HISTORY_NUM) {
-    localStorage.removeItem(imgHistoryKeys[0])
-    imgHistoryKeys.shift()
+    localStorage.removeItem(imgHistoryKeys.pop())
   }
 }
 
