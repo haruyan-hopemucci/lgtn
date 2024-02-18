@@ -114,7 +114,7 @@ $(function () {
       imgEl.src = base64;
     };
     fr.readAsDataURL(imageFile);
-    imgEl.addEventListener("load", () => drawCanvas());
+    imgEl.onload = () => drawCanvas();
   };
 
   const drawCanvas = function (redraw = false) {
