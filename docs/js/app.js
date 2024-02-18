@@ -1,6 +1,6 @@
 "use strict";
 
-const MAX_HISTORY_NUM = 10
+const MAX_HISTORY_NUM = 9
 const KEY_LOCALSTORAGE_KEY_PREFIX = 'lgtn_history_img_'
 
 const textPositionOffset = {
