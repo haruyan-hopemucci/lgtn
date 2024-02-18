@@ -9,14 +9,18 @@ const textPositionOffset = {
   bottom: [0, 120],
 }
 
-const loadHistories = () => {
+const getHistoryKeys = () => {
   const imgHistoryKeys = []
-  const startIndex = loadImgHistoryStartIndex()
   for (let i = 0; i < localStorage.length; i++) {
     const hkey = localStorage.key(i)
-    hkey.startsWith(KEY_LOCALSTORAGE_KEY_PREFIX) && imgHistoryKeys.push(loadImgHistory(num))
+    hkey.startsWith(KEY_LOCALSTORAGE_KEY_PREFIX) && imgHistoryKeys.push(hkey)
   }
   imgHistoryKeys.sort()
+  return imgHistoryKeys
+}
+
+const loadHistories = () => {
+  const imgHistoryKeys = getHistoryKeys()
   const container = document.querySelector('#history-container')
   const template = document.querySelector('#history-template')
   imgHistoryKeys.forEach(item => {
@@ -27,6 +31,14 @@ const loadHistories = () => {
   })
 }
 
+const addHistory = (dataUrl) => {
+  const timestamp = Date.now()
+  localStorage.setItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}${timestamp}`, dataUrl)
+  const imgHistoryKeys = getHistoryKeys()
+  while (imgHistoryKeys.length > MAX_HISTORY_NUM) {
+    localStorage.removeItem(imgHistoryKeys[0])
+  }
+}
 
 $(function () {
   var gCanvas = document.querySelector("canvas#output-image");
