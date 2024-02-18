@@ -1,7 +1,7 @@
 "use strict";
 
 const MAX_HISTORY_NUM = 10
-const KEY_LOCALSTORAGE_KEY_PREFIX = 'lgtn_history_img'
+const KEY_LOCALSTORAGE_KEY_PREFIX = 'lgtn_history_img_'
 
 const textPositionOffset = {
   top: [0, -100],
@@ -9,28 +9,24 @@ const textPositionOffset = {
   bottom: [0, 120],
 }
 
-const loadHistoriesAsync = () => {
-  const imgHistories = []
+const loadHistories = () => {
+  const imgHistoryKeys = []
   const startIndex = loadImgHistoryStartIndex()
-  for( let i = 0; i < MAX_HISTORY_NUM; i++){
-    const num = (startIndex - i + MAX_HISTORY_NUM) % MAX_HISTORY_NUM
-    imgHistories.push(loadImgHistory(num))
+  for (let i = 0; i < localStorage.length; i++) {
+    const hkey = localStorage.key(i)
+    hkey.startsWith(KEY_LOCALSTORAGE_KEY_PREFIX) && imgHistoryKeys.push(loadImgHistory(num))
   }
-  // TODO: history領域に画像をセットする処理など
-  console.log(imgHistories)
+  imgHistoryKeys.sort()
+  const container = document.querySelector('#history-container')
+  const template = document.querySelector('#history-template')
+  imgHistoryKeys.forEach(item => {
+    const t = template.cloneNode(true)
+    t.attributes.id = item
+    t.querySelector('img').src = localStorage.getItem(item)
+    container.appendChild(t)
+  })
 }
 
-const loadImgHistoryStartIndex = () => 
-  localStorage.getItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_index`) || 0
-
-const loadImgHistory(num) = () =>
-  localStorage.getItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_${num}`)
-
-const savaImgHistoryStartIndex = (value) =>
-  localStorage.setItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_index`, value)
-
-const saveImgHistory(num, value) = () =>
-  localStorage.getItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}_${num}`, value)
 
 $(function () {
   var gCanvas = document.querySelector("canvas#output-image");
@@ -122,7 +118,7 @@ $(function () {
       drawWidth = (imgWidth * drawHeight) / imgHeight;
       drawX = (canvas.width - drawWidth) / 2;
     }
-    
+
     // テキスト描画位置の決定
     const [drawTextX, drawTextY] = textPositionOffset[getTextPosition()]
     context.clearRect(0, 0, canvas.width, canvas.height);
