@@ -23,7 +23,7 @@ const loadHistories = () => {
   const imgHistoryKeys = getHistoryKeys()
   const container = document.querySelector('#history-container')
   const template = document.querySelector('#history-template')
-  container.childNodes.forEach(node => node.remove())
+  container.innerHTML = ''
   imgHistoryKeys.forEach(item => {
     const t = template.content.cloneNode(true)
     t.id = item
@@ -38,6 +38,7 @@ const addHistory = (dataUrl) => {
   const imgHistoryKeys = getHistoryKeys()
   while (imgHistoryKeys.length > MAX_HISTORY_NUM) {
     localStorage.removeItem(imgHistoryKeys[0])
+    imgHistoryKeys.shift()
   }
 }
 
@@ -62,6 +63,11 @@ $(function () {
       redrawLgtnImage();
     }
   });
+
+  $(".history-item").on("click", "img", (event) => {
+    gPastedImage.src = event.delegateTarget.querySelector('img').src
+    redrawLgtnImage()
+  })
 
   document.addEventListener("paste", (event) => {
     event.preventDefault();
@@ -95,7 +101,7 @@ $(function () {
     const conversionResult = await heic2any({ blob: imageFile })
     const dataUrl = URL.createObjectURL(conversionResult)
     const imgEl = document.querySelector("#pasted-image");
-    imgEl.addEventListener("load", drawCanvas);
+    imgEl.addEventListener("load", () => drawCanvas());
     imgEl.src = dataUrl;
   }
 
@@ -108,7 +114,7 @@ $(function () {
       imgEl.src = base64;
     };
     fr.readAsDataURL(imageFile);
-    imgEl.addEventListener("load", drawCanvas);
+    imgEl.addEventListener("load", () => drawCanvas());
   };
 
   const drawCanvas = function (redraw = false) {
@@ -140,7 +146,7 @@ $(function () {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imgEl, drawX, drawY, drawWidth, drawHeight);
     // 再描画の場合は履歴に追加しない
-    redraw && addHistory(canvas.toDataURL())
+    !redraw && addHistory(canvas.toDataURL())
     context.drawImage(lgtnEl, drawTextX, drawTextY, canvas.width, canvas.height);
     copyImageToClipboard(canvas);
   };
@@ -155,6 +161,8 @@ $(function () {
           setMessage(
             `クリップボードに${selectedOverlayImageValue()}画像がコピーされました！`
           );
+          // 履歴を再読み込み
+          loadHistories()
         })
         .catch((ex) => {
           console.error(ex);
@@ -164,6 +172,6 @@ $(function () {
   };
 
   const redrawLgtnImage = () => {
-    drawCanvas(redraw = true);
+    drawCanvas(true);
   };
 });
