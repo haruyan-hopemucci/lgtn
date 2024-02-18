@@ -16,4 +16,20 @@ canvas#output-image {
 
 img[hidden] {
   display: none;
+}
+
+.history-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+}
+.history-container .history-item {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.history-container .history-item img {
+  width: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
 }/*# sourceMappingURL=style.css.map */

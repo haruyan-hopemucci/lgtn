@@ -1,9 +1,44 @@
 "use strict";
 
+const MAX_HISTORY_NUM = 9
+const KEY_LOCALSTORAGE_KEY_PREFIX = 'lgtn_history_img_'
+
 const textPositionOffset = {
   top: [0, -100],
   middle: [0, 0],
   bottom: [0, 120],
+}
+
+const getHistoryKeys = () => {
+  const imgHistoryKeys = []
+  for (let i = 0; i < localStorage.length; i++) {
+    const hkey = localStorage.key(i)
+    hkey.startsWith(KEY_LOCALSTORAGE_KEY_PREFIX) && imgHistoryKeys.push(hkey)
+  }
+  imgHistoryKeys.sort().reverse()
+  return imgHistoryKeys
+}
+
+const loadHistories = () => {
+  const imgHistoryKeys = getHistoryKeys()
+  const container = document.querySelector('#history-container')
+  const template = document.querySelector('#history-template')
+  container.innerHTML = ''
+  imgHistoryKeys.forEach(item => {
+    const t = template.content.cloneNode(true)
+    t.id = item
+    t.querySelector('img').src = localStorage.getItem(item)
+    container.appendChild(t)
+  })
+}
+
+const addHistory = (dataUrl) => {
+  const timestamp = Date.now()
+  localStorage.setItem(`${KEY_LOCALSTORAGE_KEY_PREFIX}${timestamp}`, dataUrl)
+  const imgHistoryKeys = getHistoryKeys()
+  while (imgHistoryKeys.length > MAX_HISTORY_NUM) {
+    localStorage.removeItem(imgHistoryKeys.pop())
+  }
 }
 
 $(function () {
@@ -18,12 +53,20 @@ $(function () {
     elem.textContent = message;
   };
 
+  // ページ読み込み時に履歴を読み込む
+  loadHistories()
+
   $('input[name="chooseOverlay"], input[name="textPosition"]').on("change", (event) => {
     if (gPastedImage.src) {
       setMessage(`${selectedOverlayImageValue()}画像を再生成しています...`);
       redrawLgtnImage();
     }
   });
+
+  $(".history-item").on("click", "img", (event) => {
+    gPastedImage.src = event.delegateTarget.querySelector('img').src
+    redrawLgtnImage()
+  })
 
   document.addEventListener("paste", (event) => {
     event.preventDefault();
@@ -57,7 +100,7 @@ $(function () {
     const conversionResult = await heic2any({ blob: imageFile })
     const dataUrl = URL.createObjectURL(conversionResult)
     const imgEl = document.querySelector("#pasted-image");
-    imgEl.addEventListener("load", drawCanvas);
+    imgEl.addEventListener("load", () => drawCanvas());
     imgEl.src = dataUrl;
   }
 
@@ -66,14 +109,14 @@ $(function () {
     const imgEl = document.querySelector("#pasted-image");
     const fr = new FileReader();
     fr.onload = function (e) {
-      const base64 = e.target.result;
+      const base64 = e.target.result
       imgEl.src = base64;
     };
     fr.readAsDataURL(imageFile);
-    imgEl.addEventListener("load", drawCanvas);
+    imgEl.onload = () => drawCanvas();
   };
 
-  const drawCanvas = function () {
+  const drawCanvas = function (redraw = false) {
     const imgEl = gPastedImage
     const selectedImageId = selectedOverlayImageValue();
     const lgtnEl = getOverlayImage()
@@ -96,11 +139,13 @@ $(function () {
       drawWidth = (imgWidth * drawHeight) / imgHeight;
       drawX = (canvas.width - drawWidth) / 2;
     }
-    
+
     // テキスト描画位置の決定
     const [drawTextX, drawTextY] = textPositionOffset[getTextPosition()]
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(imgEl, drawX, drawY, drawWidth, drawHeight);
+    // 再描画の場合は履歴に追加しない
+    !redraw && addHistory(canvas.toDataURL())
     context.drawImage(lgtnEl, drawTextX, drawTextY, canvas.width, canvas.height);
     copyImageToClipboard(canvas);
   };
@@ -115,6 +160,8 @@ $(function () {
           setMessage(
             `クリップボードに${selectedOverlayImageValue()}画像がコピーされました！`
           );
+          // 履歴を再読み込み
+          loadHistories()
         })
         .catch((ex) => {
           console.error(ex);
@@ -124,6 +171,6 @@ $(function () {
   };
 
   const redrawLgtnImage = () => {
-    drawCanvas();
+    drawCanvas(true);
   };
 });
